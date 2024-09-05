@@ -71,7 +71,34 @@ export default function App() {
   function toggleExpand(id) {
     const targetArticle = getTargetArticle(id)
     targetArticle.expanded = !targetArticle.expanded
-    setArticleQueue(savedArticles)
+    setArticleQueue([...savedArticles])
+  }
+  const handleClick=()=>{
+    const button = event.target.closest('button')
+    if (button) {
+      const buttonType = button.getAttribute('data-button-type')
+      const articleId = button.getAttribute('data-article-id')
+      if (buttonType && articleId) {
+        switch (buttonType) {
+          case 'favorite':
+            favorite(articleId)
+            break
+          case 'archive':
+            archive(articleId)
+            break
+          case 'trash':
+            trash(articleId)
+            break
+          case 'toggleExpand':
+            toggleExpand(articleId)
+            break
+          default:
+            break
+        }
+      }
+    }
+  
+    
   }
 
   /*-------------------------------------------------------------------------*/
@@ -111,8 +138,8 @@ export default function App() {
 
   return (
     <div className='wrapper'>
-      <Header stats={stats} setArticleQueue={setArticleQueue} />
-      <div className='articles-container'>
+      <Header stats={stats} setArticleQueue={setArticleQueue}/>
+      <div className='articles-container' onClick={handleClick} >
         {articleQueue.length > 0 ? articleComponents : noArticlesMessage}
       </div>
     </div>
